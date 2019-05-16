@@ -13,7 +13,8 @@ class FakeClasseRepository implements ClasseRepository
     public function getById(IdClasse $id) : Classe
     {
         return Classe::populate([
-            'id_classe' => Uuid::uuid4()->toString()
+            'id_classe' => Uuid::uuid4()->toString(),
+            'nome_classe' => 'Nome classe #' . (int)\rand(1000, 9999)
         ]);
     }
 
@@ -24,7 +25,8 @@ class FakeClasseRepository implements ClasseRepository
         $classes = [];
         for ($i = 0; $i < $qtyFake; $i++) {
             $classes[] = Classe::populate([
-                'id_classe' => Uuid::uuid4()->toString()
+                'id_classe' => Uuid::uuid4()->toString(),
+                'nome_classe' => 'Nome classe #' . $i
             ]);
         }
 

@@ -7,6 +7,7 @@ use Acruxx\Educacao\Matricula\Domain\Entity\Aluno;
 use Acruxx\Educacao\Matricula\Domain\ValueObject\IdAluno;
 use Acruxx\Educacao\Aluno\Domain\Repository\AlunoRepository as AlunoRepositoryFromComponent;
 use Acruxx\Educacao\Aluno\Domain\Entity\Aluno as AlunoFromComponent;
+use Acruxx\Educacao\Aluno\Domain\ValueObject\IdAluno as IdAlunoFromComponent;
 
 class ComponentAlunoRepository implements AlunoRepository
 {
@@ -21,7 +22,11 @@ class ComponentAlunoRepository implements AlunoRepository
 
     public function getById(IdAluno $id) : Aluno
     {
-        return Aluno::populate(['id_aluno' => '123']); // @todo
+        $alunoFromComponent = $this->alunoRepositoryFromComponent->getById(
+            IdAlunoFromComponent::fromString($id->toString())
+        );
+
+        return $this->convertFromComponentAlunoToMatricula($alunoFromComponent);
     }
 
     /** @return Aluno[] */
@@ -39,6 +44,9 @@ class ComponentAlunoRepository implements AlunoRepository
 
     private function convertFromComponentAlunoToMatricula(AlunoFromComponent $alunoFromComponent) : Aluno
     {
-        return Aluno::populate([ 'id_aluno' => $alunoFromComponent->getId()->toString() ]);
+        return Aluno::populate([ 
+            'id_aluno' => $alunoFromComponent->getId()->toString(),
+            'nome_aluno' => $alunoFromComponent->getNome()->toString()
+        ]);
     }
 }
