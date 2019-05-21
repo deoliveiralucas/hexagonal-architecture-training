@@ -11,10 +11,10 @@ CREATE TABLE IF NOT EXISTS alunos(
 
 ```
 CREATE TABLE IF NOT EXISTS matriculas(
-  id             VARCHAR(25) PRIMARY KEY,
-  id_aluno       VARCHAR(25),
-  id_classe      VARCHAR(25),
-  status         VARCHAR(25),
+  id             VARCHAR(100) PRIMARY KEY,
+  id_aluno       VARCHAR(100),
+  id_classe      VARCHAR(100),
+  status         VARCHAR(100),
   data           TIMESTAMP
 );
 ```

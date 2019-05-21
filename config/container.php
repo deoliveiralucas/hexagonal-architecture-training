@@ -34,6 +34,12 @@ $container['view'] = function ($container) {
   return $view;
 };
 
+session_start();
+
+$container['flash'] = function () {
+    return new \Slim\Flash\Messages();
+};
+
 $container[CadastraAluno::class] = static function (ContainerInterface $container) {
   $alunoRepository = $container->get(AlunoRepository::class);
   $dispatcher = $container->get(Dispatcher::class);

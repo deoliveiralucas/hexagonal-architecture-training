@@ -1,5 +1,9 @@
 <h1>Matricula</h1>
 
+{% if formMessage is defined %}
+    <p>{{ formMessage[0] }}</p>
+{% endif %}
+
 <form action="/matricula/insert" method="POST">
     <label>Aluno: </label>
     <select name="id_aluno">
@@ -17,3 +21,29 @@
 
     <input type="submit" value="Matricular">
 </form>
+
+<hr />
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Aluno</th>
+            <th>Classe</th>
+            <th>Status</th>
+            <th>Data</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for matricula in matriculas %}
+        <tr>
+            <td>{{ matricula.getId().toString() }}</td>
+            <td>{{ matricula.getAluno().getNome().toString() }}</td>
+            <td>{{ matricula.getClasse().getNome().toString() }}</td>
+            <td>{{ matricula.getStatus().toString() }}</td>
+            <td>{{ matricula.getData().toDateTimeImmutable().format('d/m/Y H:i') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

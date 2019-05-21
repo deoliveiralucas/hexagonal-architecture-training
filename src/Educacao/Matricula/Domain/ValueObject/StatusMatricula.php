@@ -2,6 +2,8 @@
 
 namespace Acruxx\Educacao\Matricula\Domain\ValueObject;
 
+use Assert\Assertion;
+
 final class StatusMatricula
 {
 
@@ -19,10 +21,21 @@ final class StatusMatricula
         return $this->status;
     }
 
-    public function matriculado() : self
+    public static function matriculado() : self
     {
         $instance = new self;
         $instance->status = static::MATRICULADO;
+        return $instance;
+    }
+
+    public static function fromString(string $status) : self
+    {
+        Assertion::inArray($status, [
+            static::MATRICULADO,
+        ]);
+
+        $instance =  new self;
+        $instance->status = $status;
         return $instance;
     }
 }

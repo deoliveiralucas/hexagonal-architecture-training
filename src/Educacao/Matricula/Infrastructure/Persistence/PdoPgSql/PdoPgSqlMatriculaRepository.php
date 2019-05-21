@@ -34,7 +34,7 @@ class PdoPgSqlMatriculaRepository implements MatriculaRepository
         } else {
             $stm = $this->pdo->prepare('
                 INSERT INTO
-                    alunos
+                    matriculas
                 VALUES (
                     :id,
                     :id_aluno,
@@ -46,8 +46,8 @@ class PdoPgSqlMatriculaRepository implements MatriculaRepository
         }
 
         $id = $matricula->getId()->toString();
-        $idAluno = $matricula->getIdAluno()->toString();
-        $idClasse = $matricula->getIdClasse()->toString();
+        $idAluno = $matricula->getAluno()->getId()->toString();
+        $idClasse = $matricula->getClasse()->getId()->toString();
         $status = $matricula->getStatus()->toString();
         $dataMatricula = $matricula->getData()->toString();
 
@@ -77,9 +77,32 @@ class PdoPgSqlMatriculaRepository implements MatriculaRepository
 
         $result = $stm->fetch(\PDO::FETCH_ASSOC);
 
-        //var_dump($result);die;
-
         return is_array($result) ? $this->createMatriculaFromArray($result) : null;
+    }
+
+    public function findAll() : array
+    {
+        $stm = $this->pdo->prepare('
+            SELECT 
+                matriculas.id           AS id,
+                matriculas.id_aluno     AS id_aluno,
+                alunos.nome             AS nome_aluno,
+                matriculas.id_classe    AS id_classe,
+                \'Nome da Classe Fake\' AS nome_classe,
+                matriculas.status       AS status,
+                matriculas.data         AS data_matricula
+            FROM
+                matriculas
+            INNER JOIN
+                alunos ON matriculas.id_aluno = alunos.id
+        ');
+
+        $stm->execute();
+        $arrMatriculas = $stm->fetchAll(\PDO::FETCH_ASSOC);
+
+        return \array_map(function (array $arrMatricula) {
+            return $this->createMatriculaFromArray($arrMatricula);
+        }, $arrMatriculas);
     }
 
     private function createMatriculaFromArray(array $result) : Matricula
