@@ -54,6 +54,11 @@ class Matricula
         return $this->data;
     }
 
+    public function estaAtiva() : bool
+    {
+        return (new \DateTimeImmutable())->toTimestamp() < $this->data->toTimestamp();
+    }
+
     public static function nova(Aluno $aluno, Classe $classe) : self
     {
         $instance = new self;
